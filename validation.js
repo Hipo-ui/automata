@@ -2,18 +2,19 @@ const formulario = document.getElementById("form");
 const inputs = document.querySelectorAll("input");
 
 const expresiones = {
-    expresion: /^([\s]*(if){1,1}[\s]+(0|1|True|False){1,1}[\s]*((==|!=|<|>|<=|>=|([\s]+and[\s]+)|([\s]+or[\s]+)){1,1}[\s]*(0|1|True|False){1,1}[\s]*)*[:][\s]*)|([\s]*(if){1,1}[\s]*[\(]+[\s]*(0|1|True|False)*[\s]*((==|!=|<|>|<=|>=|([\s]+and[\s]+)|([\s]+or[\s]+)){1,1}[\s]*(0|1|True|False){1,1}[\s]*)*[\)]+[\s]*[:][\s]*)$/,
+    expresion: /^([\s]*(if){1,1}[\s]+(0|1|True|False){1,1}[\s]*((==|!=|<|>|<=|>=|([\s]+and[\s]+)|([\s]+or[\s]+)){1,1}[\s]*(0|1|True|False){1,1}[\s]*)*[:][\s]*)$/,
+    parentesis: /^([\s]*(if){1,1}[\s]*[\(]{1,1}[\s]*(0|1|True|False){1,1}[\s]*((==|!=|<|>|<=|>=|([\s]+and[\s]+)|([\s]+or[\s]+)){1,1}[\s]*(0|1|True|False){1,1}[\s]*)*[\)]{1,1}[\s]*[:][\s]*)$/
 };
 
 const validarFormulario = (e) => {
     switch (e.target.name) {
         case "sentencia.if":
-            validarDatos(expresiones.expresion, e.target, "sentencia");
+            validarDatos(expresiones.expresion, expresiones.parentesis, e.target, "sentencia");
             break;
     }
 };
 
-const validarDatos = (expresion, input, campo) => {
+const validarDatos = (expresion, parentesis, input, campo) => {
    
     if (input.name == "sentencia.if") {
 
@@ -25,7 +26,7 @@ const validarDatos = (expresion, input, campo) => {
             document.getElementById(campo).classList.remove("is-valid");
 
         }else{
-            if (expresion.test(input.value)) {
+            if (expresion.test(input.value) || parentesis.test(input.value)) {
                 document.querySelector(`#grupo-${campo} .invalid-feedback .info-error`).classList.add("d-none");
                 document.getElementById(campo).classList.remove("is-invalid");
     
